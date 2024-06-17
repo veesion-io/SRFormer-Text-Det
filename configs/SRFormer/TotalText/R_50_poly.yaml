@@ -2,10 +2,11 @@ _BASE_: "../Base.yaml"
 
 DATASETS:
   TRAIN: ("totaltext_poly_train_rotate_pos",)
-  TEST: ("totaltext_poly_test",) 
+  TEST: ("totaltext_poly_test",)
 
 MODEL:
-  WEIGHTS: "output/r_50_poly/pretrain/pretrained.pth" 
+  WEIGHTS: "output/r_50_poly/pretrain/pretrained.pth"
+  DEVICE: cpu
 
 SOLVER:
   IMS_PER_BATCH: 8

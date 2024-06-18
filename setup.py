@@ -64,7 +64,7 @@ def get_extensions():
 
 setup(
     name="AdelaiDet",
-    version="0.2.0",
+    version="0.2.1",
     author="Adelaide Intelligent Machines",
     url="https://github.com/stanstarks/AdelaiDet",
     description="AdelaiDet is AIM's research "
@@ -87,6 +87,7 @@ setup(
         "editdistance",
         "opencv-python",
         "numba",
+        "timm",
     ],
     extras_require={"all": ["psutil"]},
     ext_modules=get_extensions(),

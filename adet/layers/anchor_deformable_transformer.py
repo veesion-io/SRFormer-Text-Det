@@ -525,7 +525,9 @@ class DeformableTransformerDecoder_AnchorDet(nn.Module):
 
         self.ref_point_head = MLP(d_model, d_model, d_model, 2)
 
-        self.encoder_layer = nn.TransformerEncoderLayer(d_model, nhead=8, dim_feedforward=1024, batch_first=True)
+        # Removed option 'batch_first=True' because not avaiable with pytroch 1.8.1 used by NUC
+        # seems to have no impact in our usecase
+        self.encoder_layer = nn.TransformerEncoderLayer(d_model, nhead=8, dim_feedforward=1024)
         self.encoder_layer = nn.ModuleList([self.encoder_layer for _ in range(self.num_seg_layers)])
 
         self.feature_proj = nn.Linear(d_model, d_model)

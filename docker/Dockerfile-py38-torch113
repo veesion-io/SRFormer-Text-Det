@@ -1,0 +1,11 @@
+FROM nvcr.io/nvidia/pytorch:22.10-py3
+
+WORKDIR /usr/src/app
+
+COPY setup.py /usr/src/app
+COPY adet /usr/src/app/adet
+
+RUN apt update && apt-get install -y gcc
+RUN pip3 install wheel build
+
+CMD ["python3", "setup.py", "sdist", "bdist_wheel"]

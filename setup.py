@@ -61,10 +61,11 @@ def get_extensions():
 
     return ext_modules
 
+torchver = "".join(map(str, torch_ver))
 
 setup(
     name="AdelaiDet",
-    version="0.2.1",
+    version="0.2." + torchver,
     author="Adelaide Intelligent Machines",
     url="https://github.com/stanstarks/AdelaiDet",
     description="AdelaiDet is AIM's research "

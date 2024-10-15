@@ -7,8 +7,8 @@ IMAGE_NAME=adet_build
 CONTAINER_NAME=adet_builder
 CONTAINER_DEST=/usr/src/app/dist
 HOST_DEST="$(pwd)"
-PYTHON=py38
-FLAVOUR=$1
+PYTHON=$1
+FLAVOUR=$2
 
 VERSION=$PYTHON-$FLAVOUR
 

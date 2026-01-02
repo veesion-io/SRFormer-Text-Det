@@ -1,0 +1,12 @@
+FROM python:3.12-bullseye
+
+WORKDIR /usr/src/app
+
+COPY setup.py /usr/src/app
+COPY adet /usr/src/app/adet
+
+RUN apt update && apt-get install -y gcc
+RUN pip3 install torch==2.4.1 --extra-index-url https://download.pytorch.org/whl/cpu
+RUN pip3 install wheel build
+
+CMD ["python3", "setup.py", "sdist", "bdist_wheel"]

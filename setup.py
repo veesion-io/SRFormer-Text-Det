@@ -45,8 +45,6 @@ def get_extensions():
             if CC is not None:
                 extra_compile_args["nvcc"].append("-ccbin={}".format(CC))
 
-    sources = [os.path.join(extensions_dir, s) for s in sources]
-
     include_dirs = [extensions_dir]
 
     ext_modules = [

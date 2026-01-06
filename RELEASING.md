@@ -21,13 +21,9 @@ git push --tags
 
 ## Build package
 Package will be build inside docker container
-### For torch 1.13.1 python 3.8
-run
+### Versions used are major and minor concatened with a prefix for Python and Torch
+For python 3.8 torch 1.13.1, run
 `/build_package.sh py38 torch113`
-
-### For torch 1.8.1 python3.8
-run
-`./build_package.sh py38 torch18`
 
 ## Upload to devpi
 At this point you can build and then publish it on devpi:

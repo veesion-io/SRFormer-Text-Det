@@ -1,0 +1,3 @@
+include setup.py
+recursive-include adet/layers/csrc *.cpp *.cu *.h *.cuh
+

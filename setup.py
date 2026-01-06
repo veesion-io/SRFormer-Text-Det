@@ -45,9 +45,13 @@ def get_extensions():
             if CC is not None:
                 extra_compile_args["nvcc"].append("-ccbin={}".format(CC))
 
-    sources = [os.path.join(extensions_dir, s) for s in sources]
+    def make_relative(path):
+        abs_path = os.path.abspath(path)
+        rel_path = os.path.relpath(abs_path, this_dir)
+        return rel_path.replace(os.sep, "/")
 
-    include_dirs = [extensions_dir]
+    sources = [make_relative(s) for s in sources]
+    include_dirs = [make_relative(extensions_dir)]
 
     ext_modules = [
         extension(
@@ -71,6 +75,7 @@ setup(
     description="AdelaiDet is AIM's research "
     "platform for instance-level detection tasks based on Detectron2.",
     packages=find_packages(exclude=("configs", "tests")),
+    include_package_data=True,
     python_requires=">=3.6",
     install_requires=[
         "termcolor>=1.1",

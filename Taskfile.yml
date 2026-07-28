@@ -1,0 +1,32 @@
+version: "3"
+
+tasks:
+  build:
+    desc: "Build the sdist into dist/ (CPU-only package: no torch needed at build time)"
+    cmds:
+      - rm -rf dist
+      - uvx --from build pyproject-build --sdist
+
+  release:
+    desc: "Tag v<version> from setup.py, push the tag, build the sdist and upload it to devpi"
+    summary: |
+      Reads the version from setup.py (single source of truth), refuses to run
+      on a dirty tree, tags vX.Y.Z, pushes the tag, rebuilds the sdist and
+      uploads it to https://devpi.tooling.veesion.io/veesion/veesion.
+
+      When the devpi session has expired, the task prompts for the veesion
+      user's password before doing anything else.
+    interactive: true
+    cmds:
+      - git diff --quiet && git diff --cached --quiet || { echo "working tree not clean, commit first"; exit 1; }
+      - uvx --from devpi-client devpi use https://devpi.tooling.veesion.io/veesion/veesion > /dev/null
+      - |
+        if ! uvx --from devpi-client devpi use 2>/dev/null | grep -q "logged in as"; then
+          uvx --from devpi-client devpi login veesion
+        fi
+      - |
+        VERSION=$(python3 -c "import re; print(re.search(r'version=\"([^\"]+)\"', open('setup.py').read()).group(1))")
+        git tag -a "v${VERSION}" -m "v${VERSION}"
+        git push origin "v${VERSION}"
+      - task: build
+      - uvx --from devpi-client devpi upload --from-dir dist

@@ -1,35 +1,40 @@
 # Publishing a release
 
-## Set version
-Put the version of the release in `setup.py` by respecting https://semver.org/.
+Since 0.3.0 the package is a plain CPU-only sdist: no C/CUDA extension, no
+torch needed at build time, and a single static semver version. Releasing is
+two commands away.
 
-Run the tests, if the tests doesn't pass you should not deploy a release but
-maybe a pre-release or an alpha to avoid breaking stable release.
+## 1. Set the version
 
-Don't forget to update the version number if needed before building. The version number is defined at 3 places:
-* in the `setup.py` file at repository root.
+Bump `version=` in `setup.py` (single source of truth), respecting
+[semver](https://semver.org/). Commit the bump.
 
-Make a commit with the setup.py updated and tag it with the version: `vX.X.X`,
-in body of the tag you can add the major changes of this release.
+Run the tests; if they don't pass you should not deploy a release (use a
+pre-release/alpha instead of breaking stable).
 
-Don't forget to push tags
+## 2. Release
 
+```bash
+task release
 ```
-git tag v1.1.0
-git push --tags
+
+This refuses to run on a dirty tree, prompts for the devpi password when the
+session has expired (`veesion` user), tags `vX.Y.Z` from the setup.py
+version, pushes the tag, rebuilds the sdist (`task build` also works
+standalone) and uploads it to
+`https://devpi.tooling.veesion.io/veesion/veesion`.
+
+Consumers install it with:
+
+```bash
+pip install AdelaiDet==X.Y.Z \
+    --extra-index-url https://devpi.tooling.veesion.io/veesion/veesion/+simple/
 ```
 
-## Build package
-Package will be build inside docker container
-### Versions used are major and minor concatened with a prefix for Python and Torch
-For python 3.8 torch 1.13.1, run
-`/build_package.sh py38 torch113`
+## Historical note
 
-## Upload to devpi
-At this point you can build and then publish it on devpi:
-```
-devpi use https://devpi.tooling.veesion.io
-devpi login veesion
-devpi use veesion/veesion
-devpi upload --from-dir dist
-```
+Up to 0.2.x the version was derived from the torch version found at build
+time (`0.2.113` = torch 1.13) and per-python/torch wheels were built in
+docker via `build_package.sh` (kept for reference). The 0.3.0 CPU-only
+package made both mechanisms obsolete: the sdist installs anywhere the
+(already installed) torch runs, with regular build isolation.

@@ -14,7 +14,12 @@ import torch.nn.functional as F
 from torch.nn.init import xavier_uniform_, constant_
 from torch.autograd.function import once_differentiable
 
-from adet import _C
+# CPU-only installs don't build the C++/CUDA extension; the pure-PyTorch
+# fallback (multi_scale_deformable_attn_pytorch) is used instead.
+try:
+    from adet import _C
+except ImportError:
+    _C = None
 
 def multi_scale_deformable_attn_pytorch(
         value: torch.Tensor, value_spatial_shapes: torch.Tensor,

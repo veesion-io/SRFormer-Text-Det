@@ -1,3 +1,12 @@
+> **Historical note:** these notes predate the 0.3.0 CPU-only package (see
+> `../RELEASING.md`). The C++/CUDA extension is no longer built, so the
+> "apply patches on the code of ms_deform_attn_forward (cpu)" steps below are
+> obsolete — `adet/layers/ms_deform_attn.py` already falls back to a pure
+> PyTorch implementation when the compiled `adet._C` module is absent. The
+> built wheel filenames below (`AdelaiDet-0.2.0-*.whl`) are also stale; the
+> package now ships as a single version-agnostic sdist installed from
+> `https://devpi.tooling.veesion.io/veesion/veesion`.
+
 environment : python3.10
 
 pyenv local 3.10.13
